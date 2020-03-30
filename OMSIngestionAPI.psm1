@@ -24,6 +24,8 @@
     Type of data being sent in the payload to the endpoint (application/json)
 .PARAMETER resource
     Path to send the logs for ingestion to the rest endpoint
+.EXAMPLE
+    Get-OMSAPISignature -customerId bd18b307-5593-4244-b922-615e226a0325 -sharedKey aSBsb3ZlIGJpa2Vz -date 12/31/1999 -contentLength "{foo: 'bar'}".Length -method POST -contentType application/json -resource /api/logs
 #>
 Function Get-OMSAPISignature
 {

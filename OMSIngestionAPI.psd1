@@ -17,6 +17,18 @@ ModuleVersion = '1.6.0'
 # ID used to uniquely identify this module
 GUID = '2e5b9095-043d-43c6-8bc4-53dac199484c'
 
+NestedModules = @(
+    'Get-AzMonitorLogAuthorizationHeader.psm1'
+    'Write-AzMonitorLogData.psm1'        
+)
+
+FunctionsToExport = @(
+    'Get-AzMonitorLogAuthorizationHeader'
+    'Get-OMSAPISignature'
+    'Send-OMSAPIIngestionFile'
+    'Write-AzMonitorLogData'
+)
+
 # Author of this module
 Author="Microsoft Corporation"
 CompanyName="Microsoft Corporation"

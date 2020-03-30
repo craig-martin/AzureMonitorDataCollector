@@ -24,21 +24,24 @@ Describe 'OMSIngestionAPI Module' {
 }
 
 Describe 'Get-OMSAPISignature Function' {
-    $sampleObjectJson = Get-Process -Name System | ConvertTo-Json
+    $sampleObjectJson = Get-Date 12/31/1999 | ConvertTo-Json
     $sampleObjectJsonBytes = [Text.Encoding]::UTF8.GetBytes($sampleObjectJson)
 
-    It 'Should not throw with good input' {   
+    It 'Should not throw with good input' {
         {
         Get-OMSAPISignature -customerId foo -sharedKey aSBsb3ZlIGJpa2Vz -date ([DateTime]::Now) -contentLength $sampleObjectJsonBytes.Length -method POST -contentType application/json -resource /api/logs} | 
     Should Not Throw        
     }   
-
-   
-    It 'Return a string with good input' {           
+ 
+    It 'Return a string with good input' {
         Get-OMSAPISignature -customerId foo -sharedKey aSBsb3ZlIGJpa2Vz -date ([DateTime]::Now) -contentLength $sampleObjectJsonBytes.Length -method POST -contentType application/json -resource /api/logs | 
     Should Not Be $null        
+    }
+
+    It 'Return expected string with known input' {
+        Get-OMSAPISignature -customerId foo -sharedKey aSBsb3ZlIGJpa2Vz -date 12/31/1999 -contentLength $sampleObjectJsonBytes.Length -method POST -contentType application/json -resource /api/logs | 
+    Should Be 'SharedKey foo:E2Q3Q5Qere09KJcRw5AAEdV4R8U3CrA/fem+FJOQdXw='
     }   
- 
 }
 
 <#
