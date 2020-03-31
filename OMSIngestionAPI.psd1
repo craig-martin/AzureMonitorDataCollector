@@ -8,9 +8,6 @@
 
 @{
 
-# Script module or binary module file associated with this manifest.
-RootModule = 'OMSIngestionAPI.psm1'
-
 # Version number of this module.
 ModuleVersion = '1.6.0'
 
@@ -19,6 +16,8 @@ GUID = '2e5b9095-043d-43c6-8bc4-53dac199484c'
 
 NestedModules = @(
     'Get-AzMonitorLogAuthorizationHeader.psm1'
+    'Get-OMSAPISignature.psm1'
+    'Send-OMSAPIIngestionFile.psm1'
     'Write-AzMonitorLogData.psm1'        
 )
 

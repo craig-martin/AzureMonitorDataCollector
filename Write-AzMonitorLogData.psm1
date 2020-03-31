@@ -53,12 +53,13 @@ function Write-AzMonitorLogData {
             "x-ms-date"            = $rfc1123date;
             #"time-generated-field" = $TimeStampField;
         }
-
+        
         $retry = 0
         $uploadSuccess = $false
         do
         {
             $retry++
+            
             try{
                 $response = Invoke-WebRequest -Uri $uri -Method Post -ContentType 'application/json' -Headers $headers -Body ([System.Text.Encoding]::UTF8.GetBytes($JsonBody)) -UseBasicParsing
         
