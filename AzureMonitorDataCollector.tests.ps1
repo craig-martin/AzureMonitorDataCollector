@@ -1,24 +1,24 @@
 ﻿#Requires -Modules @{ ModuleName="pester"; RequiredVersion="4.10.1" }
 
-Describe 'OMSIngestionAPI Module' {
+Describe 'AzureMonitorDataCollector Module' {
     It 'Should not throw when imported ' {   
         {
-        Import-Module -Name OMSIngestionAPI } |
+        Import-Module -Name AzureMonitorDataCollector } |
     Should Not Throw        
     }   
 
     It 'Should be loaded' {   
-        Get-Module -Name OMSIngestionAPI |
+        Get-Module -Name AzureMonitorDataCollector |
     Should Not Be $null        
     }
 
     It 'Exports Get-OMSAPISignature' {           
-        Get-Command -Name Get-OMSAPISignature -Module OMSIngestionAPI |
+        Get-Command -Name Get-OMSAPISignature -Module AzureMonitorDataCollector |
     Should Not Be $null        
     }
 
     It 'Exports Send-OMSAPIIngestionFile' {           
-        Get-Command -Name Send-OMSAPIIngestionFile -Module OMSIngestionAPI |
+        Get-Command -Name Send-OMSAPIIngestionFile -Module AzureMonitorDataCollector |
     Should Not Be $null        
     }
 }
@@ -52,8 +52,8 @@ Invoke-Pester -Script OMSIngestionAPI.tests.ps1 -TestName 'Send-OMSAPIIngestionF
 
 
  Describe 'Write-AzMonitorLogData Function' {
-    InModuleScope OMSIngestionAPI {
-        Mock -CommandName Invoke-WebRequest -ModuleName OMSIngestionAPI -MockWith { 
+    InModuleScope AzureMonitorDataCollector {
+        Mock -CommandName Invoke-WebRequest -ModuleName AzureMonitorDataCollector -MockWith { 
             return [PSCustomObject]@{
                 StatusCode       = 200
             }
@@ -77,7 +77,7 @@ Invoke-Pester -Script OMSIngestionAPI.tests.ps1 -TestName 'Send-OMSAPIIngestionF
     
 
 Describe 'Send-OMSAPIIngestionFile Function' {
-    InModuleScope OMSIngestionAPI {
+    InModuleScope AzureMonitorDataCollector {
     Mock -CommandName Invoke-WebRequest -MockWith { 
         return [PSCustomObject]@{
             StatusCode       = 200
