@@ -29,18 +29,18 @@ Describe 'Get-OMSAPISignature Function' {
 
     It 'Should not throw with good input' {
         {
-        Get-OMSAPISignature -customerId foo -sharedKey aSBsb3ZlIGJpa2Vz -date ([DateTime]::Now) -contentLength $sampleObjectJsonBytes.Length -method POST -contentType application/json -resource /api/logs} | 
+        Get-OMSAPISignature -customerId bd18b307-5593-4244-b922-615e226a0325 -sharedKey aSBsb3ZlIGJpa2Vz -date ([DateTime]::Now) -contentLength $sampleObjectJsonBytes.Length -method POST -contentType application/json -resource /api/logs} | 
     Should Not Throw        
     }   
  
     It 'Return a string with good input' {
-        Get-OMSAPISignature -customerId foo -sharedKey aSBsb3ZlIGJpa2Vz -date ([DateTime]::Now) -contentLength $sampleObjectJsonBytes.Length -method POST -contentType application/json -resource /api/logs | 
+        Get-OMSAPISignature -customerId bd18b307-5593-4244-b922-615e226a0325 -sharedKey aSBsb3ZlIGJpa2Vz -date ([DateTime]::Now) -contentLength $sampleObjectJsonBytes.Length -method POST -contentType application/json -resource /api/logs | 
     Should Not Be $null        
     }
 
     It 'Return expected string with known input' {
-        Get-OMSAPISignature -customerId foo -sharedKey aSBsb3ZlIGJpa2Vz -date 12/31/1999 -contentLength $sampleObjectJsonBytes.Length -method POST -contentType application/json -resource /api/logs | 
-    Should Be 'SharedKey foo:E2Q3Q5Qere09KJcRw5AAEdV4R8U3CrA/fem+FJOQdXw='
+        Get-OMSAPISignature -customerId bd18b307-5593-4244-b922-615e226a0325 -sharedKey aSBsb3ZlIGJpa2Vz -date 12/31/1999 -contentLength $sampleObjectJsonBytes.Length -method POST -contentType application/json -resource /api/logs | 
+    Should Be 'SharedKey bd18b307-5593-4244-b922-615e226a0325:Q4tdanjN+IGz8hBW6VP4NeU6Vnhnwv1SJ58PpXtv/aw='
     }   
 }
 
@@ -88,14 +88,14 @@ Describe 'Send-OMSAPIIngestionFile Function' {
     
     It 'Should not throw with good input' {                  
         {
-            Send-OMSAPIIngestionFile -customerId foo -sharedKey aSBsb3ZlIGJpa2Vz -body $sampleObjectJson -logType fooLog
+            Send-OMSAPIIngestionFile -customerId bd18b307-5593-4244-b922-615e226a0325 -sharedKey aSBsb3ZlIGJpa2Vz -body $sampleObjectJson -logType fooLog
             Assert-MockCalled -CommandName Invoke-WebRequest
         } |
         Should Not Throw                 
     }
 
     It 'Return "Accepted" with good input' {                  
-        Send-OMSAPIIngestionFile -customerId foo -sharedKey aSBsb3ZlIGJpa2Vz -body $sampleObjectJson -logType fooLog |
+        Send-OMSAPIIngestionFile -customerId bd18b307-5593-4244-b922-615e226a0325 -sharedKey aSBsb3ZlIGJpa2Vz -body $sampleObjectJson -logType fooLog |
         Should Be 'Accepted'          
     }
 }
@@ -105,18 +105,18 @@ Describe 'Send-OMSAPIIngestionFile Function' {
 Describe 'Get-AzMonitorLogAuthorizationHeader' {
     It 'Should not throw with good input' {
         {
-            Get-AzMonitorLogAuthorizationHeader -WorkspaceId bd18b307-5593-4244-b922-615e226a0325 -WorkspaceKey aSBsb3ZlIGJpa2Vz -JsonBody "{foo: 'bar'}" -RequestDate (Get-Date) 
+            Get-AzMonitorLogAuthorizationHeader -WorkspaceId bd18b307-5593-4244-b922-615e226a0325 -WorkspaceKey aSBsb3ZlIGJpa2Vz -JsonBodyLength 5000 -RequestDate (Get-Date) 
         } | 
     Should Not Throw        
     }   
  
     It 'Return a string with good input' {
-        Get-AzMonitorLogAuthorizationHeader -WorkspaceId bd18b307-5593-4244-b922-615e226a0325 -WorkspaceKey aSBsb3ZlIGJpa2Vz -JsonBody "{foo: 'bar'}" -RequestDate (Get-Date) | 
+        Get-AzMonitorLogAuthorizationHeader -WorkspaceId bd18b307-5593-4244-b922-615e226a0325 -WorkspaceKey aSBsb3ZlIGJpa2Vz -JsonBodyLength 5000 -RequestDate (Get-Date) | 
     Should Not Be $null        
     }
 
     It 'Return expected string with known input' {
-        Get-AzMonitorLogAuthorizationHeader -WorkspaceId bd18b307-5593-4244-b922-615e226a0325 -WorkspaceKey aSBsb3ZlIGJpa2Vz -JsonBody "{foo: 'bar'}" -RequestDate 12/31/1999 | 
-    Should Be 'SharedKey bd18b307-5593-4244-b922-615e226a0325:Xo4Gzp/DmUzINl0nPfTtmg7eCsqSqpaMR7lsR9+z6Wc='
+        Get-AzMonitorLogAuthorizationHeader -WorkspaceId bd18b307-5593-4244-b922-615e226a0325 -WorkspaceKey aSBsb3ZlIGJpa2Vz -JsonBodyLength 5000 -RequestDate 12/31/1999 | 
+    Should Be 'SharedKey bd18b307-5593-4244-b922-615e226a0325:LsqvTolrm7gnuwUk/wxyvb231/96BilaolwgUm7gowU='
     }   
 }

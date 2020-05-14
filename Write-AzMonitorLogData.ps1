@@ -1,7 +1,7 @@
 function Write-AzMonitorLogData {
     <#
 .SYNOPSIS
-    Short description
+    Sends json securely to an Azure Monitor Log Analytics workspace using a workspace ID and shared key
 .DESCRIPTION
     Long description
 .EXAMPLE
@@ -33,20 +33,31 @@ function Write-AzMonitorLogData {
         [Parameter(Mandatory=$false, ValueFromPipeline=$true)]
         [object]$InputObject,
         [Parameter(Mandatory=$false)]
-        [String]$JSON
+        [String]$JSON,
+        [Parameter(Mandatory = $False)]
+        $EnvironmentName = "AzurePublic"
     )
     process{
+        if($EnvironmentName -eq "AzureUSGovernment")
+        {
+            $Env = ".ods.opinsights.azure.us"
+        }
+        Else
+        {
+            $Env = ".ods.opinsights.azure.com"
+        }
+
         $resource = '/api/logs'
         $requestDate = [DateTime]::UtcNow
         $rfc1123date = $requestDate.ToString("r")
             
-        $uri = "https://" + $WorkspaceId + ".ods.opinsights.azure.com" + $resource + "?api-version=2016-04-01"
+        $uri = "https://" + $WorkspaceId + $Env + $resource + "?api-version=2016-04-01"
 
         if ($InputObject) {$jsonBody = $InputObject | ConvertTo-Json -Depth 100}
         if ($JSON) {$jsonBody = $JSON}
     
         Write-Verbose "  JSON body length: $($jsonBody.Length)"
-        $signature = Get-AzMonitorLogAuthorizationHeader -WorkspaceId $WorkspaceId -WorkspaceKey $WorkspaceKey -JsonBody $jsonBody -RequestDate $requestDate
+        $signature = Get-AzMonitorLogAuthorizationHeader -WorkspaceId $WorkspaceId -WorkspaceKey $WorkspaceKey -JsonBodyLength $jsonBody.Length -RequestDate $requestDate
         $headers = @{
             "Authorization"        = $signature;
             "Log-Type"             = $LogType;

@@ -55,60 +55,15 @@ Function Send-OMSAPIIngestionFile
         [Parameter(Mandatory = $True)]$body,
         [Parameter(Mandatory = $True)]$logType,
         [Parameter(Mandatory = $False)]$TimeStampField,
-        [Parameter(Mandatory = $False)]$EnvironmentName
+        [Parameter(Mandatory = $False)]$EnvironmentName = "AzurePublic"
     )
 
-    #<KR> - Added to encode JSON message in UTF8 form for double-byte characters
-    $body=[Text.Encoding]::UTF8.GetBytes($body)
+    try {
+        Write-AzMonitorLogData -WorkspaceId $customerId -WorkspaceKey $sharedKey -JSON $body -LogType $logType -EnvironmentName $EnvironmentName -ErrorAction Stop
+        Write-Output 'Accepted'
+    }
+    catch {
+        Write-Warning -Message "Upload failed. `n $_"
+    }
     
-    $method = "POST"
-    $contentType = "application/json"
-    $resource = "/api/logs"
-    $rfc1123date = [DateTime]::UtcNow.ToString("r")
-    $contentLength = $body.Length
-    $signature = Get-OMSAPISignature `
-     -customerId $customerId `
-     -sharedKey $sharedKey `
-     -date $rfc1123date `
-     -contentLength $contentLength `
-     -method $method `
-     -contentType $contentType `
-     -resource $resource
-    if($EnvironmentName -eq "AzureUSGovernment")
-    {
-        $Env = ".ods.opinsights.azure.us"
-    }
-    Else
-    {
-        $Env = ".ods.opinsights.azure.com"
-    }
-    $uri = "https://" + $customerId + $Env + $resource + "?api-version=2016-04-01"
-    if ($TimeStampField.length -gt 0)
-    {
-        $headers = @{
-            "Authorization" = $signature;
-            "Log-Type" = $logType;
-            "x-ms-date" = $rfc1123date;
-            "time-generated-field"=$TimeStampField;
-        }
-    }
-    else {
-         $headers = @{
-            "Authorization" = $signature;
-            "Log-Type" = $logType;
-            "x-ms-date" = $rfc1123date;
-        }
-    } 
-    $response = Invoke-WebRequest `
-        -Uri $uri `
-        -Method $method `
-        -ContentType $contentType `
-        -Headers $headers `
-        -Body $body `
-        -UseBasicParsing
-    
-    if ($response.StatusCode -ge 200 -and $response.StatusCode -le 299)
-    {
-        write-output 'Accepted'
-    }
 }
